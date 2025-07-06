@@ -230,3 +230,31 @@ ggplot(f1_scores, aes(x = Model, y = F1, fill = Model)) +
   scale_fill_brewer(palette = "Set3")
 # Save F1 score plot
 ggsave("model_f1_comparison.png", width = 8, height = 6)
+
+# ------------------------------------------
+# Print table of Accuracy, Precision, Recall, and F1 scores of models
+# ------------------------------------------
+results_table <- data.frame(
+  Model = c("Multinomial Logistic Regression", "Decision Tree", "Random Forest", "XGBoost"),
+  Accuracy = c(acc_multi, acc_tree, acc_rf, acc_xgb),
+  Precision = c(
+    mean(confusion_multi$byClass[, "Precision"]),
+    mean(confusion_tree$byClass[, "Precision"]),
+    mean(confusion_rf$byClass[, "Precision"]),
+    mean(confusion_xgb$byClass[, "Precision"])
+  ),
+  Recall = c(
+    mean(confusion_multi$byClass[, "Recall"]),
+    mean(confusion_tree$byClass[, "Recall"]),
+    mean(confusion_rf$byClass[, "Recall"]),
+    mean(confusion_xgb$byClass[, "Recall"])
+  ),
+  F1 = c(
+    mean(confusion_multi$byClass[, "F1"]),
+    mean(confusion_tree$byClass[, "F1"]),
+    mean(confusion_rf$byClass[, "F1"]),
+    mean(confusion_xgb$byClass[, "F1"])
+  )
+)
+print("Model Performance Summary:")
+print(results_table)
